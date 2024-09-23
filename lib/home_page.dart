@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:notes/add_note.dart';
 import 'package:notes/model/note_ui_model.dart';
 import 'package:notes/note_item.dart';
 
@@ -31,7 +32,11 @@ class HomePage extends StatelessWidget {
             return NoteItem(note: notes[index]);
           }),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+            return const AddNote();
+          }));
+        },
         child: const Icon(Icons.add),
       ),
     );
