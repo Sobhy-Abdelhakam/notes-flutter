@@ -1,8 +1,38 @@
 import 'package:flutter/material.dart';
-import 'package:notes/home_page.dart';
+import 'package:notes/core/utils/database_helper.dart';
+import 'package:notes/data/repository/note_repository_impl.dart';
+import 'package:notes/domain/usecases/add_note_usecase.dart';
+import 'package:notes/domain/usecases/get_notes_usecase.dart';
+import 'package:notes/presentation/viewModels/note_viewmodel.dart';
+import 'package:provider/provider.dart';
+
+import 'presentation/screens/home_page.dart';
 
 void main() {
-  runApp(const MyApp());
+  // steps to create local storage project
+  /*
+  * 1- Add dependency => sqflite
+  * 2- Define Data model (Note)
+  * 3- Open the database
+  * 4- Create table in database
+  * 5 - then do operation to the table (Insert, Query, Update, Delete)
+  * */
+
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) {
+            return NoteViewModel(
+              AddNoteUseCase(NoteRepositoryImpl(DatabaseHelper.instance)),
+              GetNotesUseCase(NoteRepositoryImpl(DatabaseHelper.instance)),
+            );
+          },
+        )
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {

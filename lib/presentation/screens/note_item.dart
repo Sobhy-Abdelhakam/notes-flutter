@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:notes/model/note_ui_model.dart';
+import 'package:notes/data/model/note_model.dart';
+
 
 class NoteItem extends StatelessWidget {
-  final NoteUiModel note;
+  final NoteModel note;
   const NoteItem({super.key, required this.note});
 
   @override
@@ -32,7 +33,7 @@ class NoteItem extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.all(2.0),
-              child: Text(note.createdAt, textAlign: TextAlign.end,),
+              child: Text(note.createdAt.timeZoneName, textAlign: TextAlign.end,),
             )
           ],
         ),
