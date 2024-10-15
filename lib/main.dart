@@ -1,12 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:notes/core/utils/database_helper.dart';
-import 'package:notes/data/repository/note_repository_impl.dart';
-import 'package:notes/domain/usecases/add_note_usecase.dart';
-import 'package:notes/domain/usecases/get_notes_usecase.dart';
-import 'package:notes/presentation/viewModels/note_viewmodel.dart';
-import 'package:provider/provider.dart';
-
-import 'presentation/screens/home_page.dart';
+import 'package:notes/presentation/screens/home_layout.dart';
 
 void main() {
   // steps to create local storage project
@@ -18,21 +11,7 @@ void main() {
   * 5 - then do operation to the table (Insert, Query, Update, Delete)
   * */
 
-  runApp(
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider(
-          create: (_) {
-            return NoteViewModel(
-              AddNoteUseCase(NoteRepositoryImpl(DatabaseHelper.instance)),
-              GetNotesUseCase(NoteRepositoryImpl(DatabaseHelper.instance)),
-            );
-          },
-        )
-      ],
-      child: const MyApp(),
-    ),
-  );
+  runApp(const MyApp(),);
 }
 
 class MyApp extends StatelessWidget {
@@ -48,7 +27,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       debugShowCheckedModeBanner: false,
-      home: const HomePage(),
+      home: const HomeLayout(),
     );
   }
 }

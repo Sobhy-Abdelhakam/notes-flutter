@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
-import '../viewModels/note_viewmodel.dart';
+import 'package:notes/core/cubit/cubit.dart';
 
 class AddNote extends StatefulWidget {
   const AddNote({super.key});
@@ -19,24 +17,25 @@ class _AddNoteState extends State<AddNote> {
     contentController.dispose();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
-    final viewModel = Provider.of<NoteViewModel>(context);
     return Scaffold(
       appBar: AppBar(
         actions: [
           Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: IconButton(
+              padding: const EdgeInsets.all(8.0),
+              child: IconButton(
                 icon: const Icon(
                   Icons.check,
                 ),
-              onPressed: (){
-                  viewModel.addNote(titleController.text, contentController.text);
+                onPressed: () {
+                  AppCubit.get(context)
+                      .insertNote(titleController.text, contentController.text);
+                  // viewModel.addNote(titleController.text, contentController.text);
                   Navigator.pop(context);
-              },
-            )
-          )
+                },
+              ))
         ],
       ),
       body: SingleChildScrollView(

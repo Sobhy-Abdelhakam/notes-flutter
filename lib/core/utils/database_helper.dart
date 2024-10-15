@@ -1,20 +1,14 @@
+import 'package:notes/core/utils/constants.dart';
 import 'package:notes/data/model/note_model.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
 class DatabaseHelper {
-  static const _databaseName = "myDatabase.db";
-  static const _databaseVersion = 1;
-
-  static const table = 'note';
-  static const columnId = 'id';
-  static const columnTitle = 'title';
-  static const columnContent = 'content';
-  static const columnCreateAt = 'created_at';
+  static const String _databaseName = "myDatabase.db";
+  static const int _databaseVersion = 1;
 
   // make a singleton class
   DatabaseHelper._privateConstructor();
-
   static final DatabaseHelper instance = DatabaseHelper._privateConstructor();
 
   // only have a single app-wide reference to the database
@@ -28,27 +22,63 @@ class DatabaseHelper {
     final dbPath = await getDatabasesPath();
     String path = join(dbPath, _databaseName);
     // open the database
-    Database database = await openDatabase(path, version: _databaseVersion,
-        onCreate: (db, version) {
-      // when creating the database, create the table
-      db.execute('''CREATE TABLE $table (
+    return await openDatabase(
+      path,
+      version: _databaseVersion,
+      onCreate: _onCreate,
+    );
+  }
+
+  // create tables
+  _onCreate(Database db, int version) {
+    db.execute('''CREATE TABLE $noteTable (
           $columnId INTEGER PRIMARY KEY AUTOINCREMENT,
           $columnTitle TEXT NOT NULL, 
           $columnContent TEXT NOT NULL,
           $columnCreateAt TEXT NOT NULL
           )''');
-    });
-    return database;
+    db.execute('''CREATE TABLE $taskTable (
+        $columnId INTEGER PRIMARY KEY,
+         $columnTitle TEXT NOT NULL,
+          $taskStatus BOOLEAN)
+          ''');
   }
 
   Future<void> insertNote(NoteModel note) async {
     final db = await database;
-    await db.insert(table, note.toMap(),
-        conflictAlgorithm: ConflictAlgorithm.replace);
+    await db.insert(
+      noteTable,
+      note.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
   }
-  Future<List<NoteModel>> getNotes() async{
+
+  Future<List<NoteModel>> getNotes() async {
     final db = await database;
-    final List<Map<String,dynamic>> listOfMap= await db.query(table);
+    final List<Map<String, dynamic>> listOfMap = await db.query(noteTable);
     return listOfMap.map((item) => NoteModel.fromMap(item)).toList();
+  }
+
+  Future<void> insertTask(String task) async {
+    final db = await database;
+    db.insert(
+      taskTable,
+      {
+        columnTitle: task,
+        taskStatus: false,
+      },
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+    // return db.transaction(
+    //   (action) async {
+    //     await action.rawInsert(
+    //         'INSERT INTO $taskTable ($columnTitle, $taskStatus) VALUES ("$task", false)');
+    //   },
+    // );
+  }
+
+  Future<List<Map>> getTasks() async {
+    final db = await database;
+    return db.rawQuery('SELECT * FROM $taskTable');
   }
 }
