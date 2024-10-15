@@ -21,29 +21,26 @@ class NotesPage extends StatelessWidget {
                   itemCount: cubit.notes.length,
                   itemBuilder: (context, index) {
                     var note = cubit.notes[index];
-                    return NoteItem(note: note);
+                    return InkWell(
+                      child: NoteItem(note: note),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) {
+                              return BlocProvider.value(
+                                value: AppCubit.get(context),
+                                child: AddNote(
+                                  note: note,
+                                ),
+                              );
+                            },
+                          ),
+                        );
+                      },
+                    );
                   },
                 ),
-
-          // FutureBuilder(
-          //     future: viewModel.fetchNotes(),
-          //     builder: (context, snapshot) {
-          //       if (snapshot.connectionState == ConnectionState.waiting) {
-          //         return const CircularProgressIndicator();
-          //       } else if (snapshot.hasData) {
-          //         final notes = snapshot.data as List<NoteModel>;
-          //         if (notes.isEmpty) {
-          //           return const Text('There are no data in database');
-          //         }
-          //         return ListView.builder(
-          //             itemCount: notes.length,
-          //             itemBuilder: (context, index) {
-          //               return NoteItem(note: notes[index]);
-          //             });
-          //       } else {
-          //         return const Center(child: Text('No notes available.'));
-          //       }
-          //     }),
           floatingActionButton: FloatingActionButton(
             onPressed: () {
               Navigator.of(context).push(

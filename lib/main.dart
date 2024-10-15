@@ -7,7 +7,7 @@ void main() {
   * 1- Add dependency => sqflite
   * 2- Define Data model (Note)
   * 3- Open the database
-  * 4- Create table in database
+  * 4- Create tables in database
   * 5 - then do operation to the table (Insert, Query, Update, Delete)
   * */
 

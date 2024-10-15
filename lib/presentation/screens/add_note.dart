@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:notes/core/cubit/cubit.dart';
+import 'package:notes/data/model/note_model.dart';
 
 class AddNote extends StatefulWidget {
-  const AddNote({super.key});
+  final NoteModel? note;
+
+  const AddNote({super.key, this.note});
 
   @override
   State<AddNote> createState() => _AddNoteState();
@@ -11,6 +14,16 @@ class AddNote extends StatefulWidget {
 class _AddNoteState extends State<AddNote> {
   final titleController = TextEditingController();
   final contentController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.note != null) {
+      titleController.text = widget.note!.title;
+      contentController.text = widget.note!.content;
+    }
+  }
+
   @override
   void dispose() {
     titleController.dispose();
@@ -22,6 +35,7 @@ class _AddNoteState extends State<AddNote> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        title: Text(widget.note != null ? 'Update Note' : 'Add Note'),
         actions: [
           Padding(
               padding: const EdgeInsets.all(8.0),
@@ -30,9 +44,8 @@ class _AddNoteState extends State<AddNote> {
                   Icons.check,
                 ),
                 onPressed: () {
-                  AppCubit.get(context)
-                      .insertNote(titleController.text, contentController.text);
-                  // viewModel.addNote(titleController.text, contentController.text);
+                  AppCubit.get(context).insertOrUpdateNote(widget.note?.id,
+                      titleController.text, contentController.text);
                   Navigator.pop(context);
                 },
               ))

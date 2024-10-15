@@ -42,11 +42,11 @@ class AppCubit extends Cubit<AppStates> {
     });
   }
 
-  insertNote(String title, String content) {
+  insertOrUpdateNote(int? id, String title, String content) {
     _databaseHelper
         .insertNote(
       NoteModel(
-        id: null,
+        id: id,
         title: title,
         content: content,
         createdAt: DateTime.now(),
