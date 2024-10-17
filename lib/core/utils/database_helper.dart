@@ -59,6 +59,12 @@ class DatabaseHelper {
     return listOfMap.map((item) => NoteModel.fromMap(item)).toList();
   }
 
+  Future<void> deleteNote(int id) async {
+    final db = await database;
+    // db.delete(noteTable, where: 'columnId = ?', whereArgs: ['$id']);
+    db.rawDelete('DELETE FROM $noteTable WHERE $columnId = ?', ['$id']);
+  }
+
   Future<void> insertTask(String task) async {
     final db = await database;
     db.insert(

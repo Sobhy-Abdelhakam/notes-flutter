@@ -13,5 +13,6 @@ class GetTasksFromDatabaseState extends AppStates{}
 class InsertIntoNoteTableState extends AppStates {}
 class NoteLoadingState extends AppStates {}
 class GetNotesFromDatabaseState extends AppStates {}
+class DeleteNoteState extends AppStates {}
 
 class ChangeBottomSheetState extends AppStates{}

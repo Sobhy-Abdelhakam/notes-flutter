@@ -38,6 +38,9 @@ class NotesPage extends StatelessWidget {
                           ),
                         );
                       },
+                      // onDoubleTap: (){
+                      //   cubit.deleteNote(note.id!);
+                      // },
                     );
                   },
                 ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:notes/core/cubit/cubit.dart';
 import 'package:notes/data/model/note_model.dart';
 
 class NoteItem extends StatelessWidget {
@@ -7,7 +8,9 @@ class NoteItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
+    return Dismissible(
+      key: Key(note.id.toString()),
+      child: Card(
         elevation: 8.0,
         margin: const EdgeInsets.all(8.0),
         child: Padding(
@@ -42,6 +45,11 @@ class NoteItem extends StatelessWidget {
               )
             ],
           ),
-        ));
+        ),
+      ),
+      onDismissed: (direction) {
+        AppCubit.get(context).deleteNote(note.id!);
+      },
+    );
   }
 }

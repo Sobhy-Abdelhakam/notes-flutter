@@ -79,6 +79,18 @@ class AppCubit extends Cubit<AppStates> {
     );
   }
 
+  deleteNote(int id) {
+    _databaseHelper.deleteNote(id).then(
+      (_) {
+        print('delete note successfully');
+        emit(DeleteNoteState());
+        getNotes();
+      },
+    ).catchError((error) {
+      print('DeleteError: $error');
+    });
+  }
+
   // Bottom Sheet
   bool isBottomSheetOpen = false;
   IconData fabIcon = Icons.edit;
